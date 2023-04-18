@@ -1,14 +1,11 @@
 package com.example.mobile_labs_20521247
 
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
-import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mobile_labs_20521247.databinding.ActivityMainBinding
+import java.math.RoundingMode
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = EmployeeAdapter(dataSource.empList)
         binding.rvEmployees.adapter = adapter
         binding.rvEmployees.layoutManager = LinearLayoutManager(this)
+        ( binding.rvEmployees.layoutManager as LinearLayoutManager).stackFromEnd = true
         binding.button.setOnClickListener{
             var empName = binding.editTextTextPersonName.text.toString()
             var empSalary = binding.editTextTextPersonName2.text.toString()

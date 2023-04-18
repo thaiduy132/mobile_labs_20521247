@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.example.mobile_labs_20521247.databinding.ItemEmployeeBinding
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class EmployeeAdapter(
     // Data source of employees to adapt it to View
@@ -27,7 +29,8 @@ class EmployeeAdapter(
 
     override fun onBindViewHolder(holder: EmployeeViewHolder, position: Int) {
         holder.binding.apply {
-            tvEmployeeGrossSalary.text = employees[position].calculateGrossSalary().toString()
+            // Use BigDecimal class to show all digits instead of "E" character
+            tvEmployeeGrossSalary.text = BigDecimal.valueOf(employees[position].calculateGrossSalary()).setScale(0, RoundingMode.HALF_EVEN).toPlainString().toString()
             tvEmployeeName.text = employees[position].name.toString()
             tvEmployeeSalary.text = employees[position].salary.toString()
         }
