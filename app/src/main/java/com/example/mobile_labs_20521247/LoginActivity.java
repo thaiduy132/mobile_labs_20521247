@@ -59,21 +59,25 @@ public class LoginActivity extends AppCompatActivity {
                             Log.e("firebase", "Error getting data", task.getException());
                         }
                         else {
-                            Log.d("firebase", task.getResult().child("password").getValue().toString());
-
-
-                            if(task.getResult().child("password").getValue().toString().equals(sp.PasswordHash(Password.getText().toString()))){
-                                phone = task.getResult().child("phone").getValue().toString();
-                                fullname = task.getResult().child("fullname").getValue().toString();
-                                Toast.makeText(getApplicationContext(),"You have logged in",Toast.LENGTH_SHORT).show();
-                                Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                                finish();
-                                Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
-                                startActivity(intent);
-
-                            }else{
+                            if(task.getResult().getValue()  == null){
                                 Toast.makeText(getApplicationContext(),"Username or Password is incorrect",Toast.LENGTH_SHORT).show();
+                            }
+                            if(task.getResult().getValue() != null) {
 
+                                if(task.getResult().child("password").getValue().toString().equals(sp.PasswordHash(Password.getText().toString()))){
+                                    phone = task.getResult().child("phone").getValue().toString();
+                                    fullname = task.getResult().child("fullname").getValue().toString();
+                                    Toast.makeText(getApplicationContext(),"You have logged in",Toast.LENGTH_SHORT).show();
+                                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                                    finish();
+                                    Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
+                                    intent.putExtra("FULL_NAME",fullname);
+                                    startActivity(intent);
+
+                                }else{
+                                    Toast.makeText(getApplicationContext(),"Username or Password is incorrect",Toast.LENGTH_SHORT).show();
+
+                                }
                             }
 
                         }
