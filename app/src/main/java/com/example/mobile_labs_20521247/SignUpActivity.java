@@ -2,6 +2,7 @@ package com.example.mobile_labs_20521247;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,9 +10,14 @@ import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -55,12 +61,34 @@ public class SignUpActivity extends AppCompatActivity {
                 // Tạo một đối tượng User mới
                 User user = new User(username, fullname,phone, password);
                 SupportClass sp = new SupportClass();
-                user.setPassword(sp.PasswordHash(password));
-                databaseReference.child(user.getUsername()).setValue(user);
-                Toast.makeText(getApplicationContext(),"Dang ki thanh cong", Toast.LENGTH_SHORT).show();
-                finish();
-                Intent intent = new Intent(view.getContext(),LoginActivity.class);
-                startActivity(intent);
+                Log.d("Tui moi click","DTMDKMQ");
+                databaseReference.child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        }
+                        else {
+                            DataSnapshot snapshot = task.getResult();
+                            if (snapshot.exists()){
+                                Toast.makeText(getApplicationContext(), "Username da ton tai", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                user.setPassword(sp.PasswordHash(password));
+                                databaseReference.child(user.getUsername()).setValue(user);
+                                Toast.makeText(getApplicationContext(),"Dang ki thanh cong", Toast.LENGTH_SHORT).show();
+                                finish();
+                                Intent intent = new Intent(view.getContext(),LoginActivity.class);
+                                startActivity(intent);
+                            }
+
+                        }
+                    }
+                });
+
+                Log.d("Tui moi click",databaseReference.child(username).get().toString());
+
+
             }
         });
     }
