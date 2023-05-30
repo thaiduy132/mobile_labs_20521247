@@ -74,12 +74,17 @@ public class SignUpActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Username da ton tai", Toast.LENGTH_SHORT).show();
                             }
                             else{
-                                user.setPassword(sp.PasswordHash(password));
-                                databaseReference.child(user.getUsername()).setValue(user);
-                                Toast.makeText(getApplicationContext(),"Dang ki thanh cong", Toast.LENGTH_SHORT).show();
-                                finish();
-                                Intent intent = new Intent(view.getContext(),LoginActivity.class);
-                                startActivity(intent);
+                                if(validate(username,password)){
+                                    user.setPassword(sp.PasswordHash(password));
+                                    databaseReference.child(user.getUsername()).setValue(user);
+                                    Toast.makeText(getApplicationContext(),"Dang ki thanh cong", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                    Intent intent = new Intent(view.getContext(),LoginActivity.class);
+                                    startActivity(intent);
+                                }
+                                else
+                                    Log.d("WRONG INFO","hihi");
+           
                             }
 
                         }
@@ -92,6 +97,10 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
-
+    
+    public boolean validate(String username,String password){
+        if (username.length() < 6 || password.length() < 6) return false;
+        return true;
+    }
 
 }
